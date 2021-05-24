@@ -3,6 +3,8 @@ import SwiftUI
 public struct AttributyText: View {
     public typealias RuleModifierCallback = (ParsableElement) -> ((AttributyStyable) -> AttributyStyable)
 
+    @State private var size: CGSize = .zero
+
     private let content: String
     private let parser: AttributyParser
     private let callback: RuleModifierCallback
@@ -30,6 +32,7 @@ public struct AttributyText: View {
     }
 
     public var body: some View {
-        AttributyTextView(tokenizedContent: tokenizedContent, ruleMap: ruleMap)
+        AttributyTextView(tokenizedContent: tokenizedContent, ruleMap: ruleMap, size: $size)
+            .frame(width: size.width, height: size.height)
     }
 }

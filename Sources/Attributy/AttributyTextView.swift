@@ -2,19 +2,23 @@ import SwiftUI
 import UIKit
 
 final class AttributyTextView: UIViewRepresentable {
+    @Binding private var size: CGSize
+
     private let tokenizedContent: [ParserToken]
     private let ruleMap: [ParsableElement: AttributyStyable]
 
-    init(tokenizedContent: [ParserToken], ruleMap: [ParsableElement: AttributyStyable]) {
+    private var attributedString: NSAttributedString?
+    private var linkAttributes: [NSAttributedString.Key: Any]?
+
+    init(tokenizedContent: [ParserToken], ruleMap: [ParsableElement: AttributyStyable], size: Binding<CGSize>) {
         self.tokenizedContent = tokenizedContent
         self.ruleMap = ruleMap
+        self._size = size
+
+        makeAttributedString()
     }
 
-    func makeCoordinator() -> Coordinator {
-        .init(ruleMap: ruleMap)
-    }
-
-    func makeUIView(context: Context) -> some UIView {
+    private func makeAttributedString() {
         let mutableAttributedString = NSMutableAttributedString(string: "")
 
         var linkAttributes: [NSAttributedString.Key: Any]?
@@ -39,21 +43,36 @@ final class AttributyTextView: UIViewRepresentable {
             mutableAttributedString.append(attributedString)
         }
 
+        self.attributedString = mutableAttributedString
+        self.linkAttributes = linkAttributes
+    }
 
+    func makeCoordinator() -> Coordinator {
+        .init(ruleMap: ruleMap)
+    }
+
+    func makeUIView(context: Context) -> UITextView {
         let textField: UITextView = .init()
         textField.delegate = context.coordinator
         textField.isEditable = false
         textField.isSelectable = true
-        textField.attributedText = mutableAttributedString
-
-        if let _linkAttributes = linkAttributes {
-            textField.linkTextAttributes = _linkAttributes
-        }
 
         return textField
     }
 
-    func updateUIView(_ uiView: UIViewType, context: Context) { }
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        if let attributedString = attributedString {
+            uiView.attributedText = attributedString
+        }
+
+        if let linkAttributes = linkAttributes {
+            uiView.linkTextAttributes = linkAttributes
+        }
+
+        DispatchQueue.main.async {
+            self.size = uiView.sizeThatFits(uiView.superview?.bounds.size ?? .zero)
+        }
+    }
 }
 
 extension AttributyTextView {
@@ -78,6 +97,13 @@ extension AttributyTextView {
             }
 
             return false
+        }
+
+        func textViewDidChange(_ textView: UITextView) {
+            let fixedWidth = textView.frame.width
+            let newSize = textView.sizeThatFits(.init(width: fixedWidth, height: .greatestFiniteMagnitude))
+
+            textView.frame.size = .init(width: max(newSize.width, fixedWidth), height: newSize.height)
         }
     }
 }

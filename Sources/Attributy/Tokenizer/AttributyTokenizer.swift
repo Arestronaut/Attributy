@@ -14,7 +14,7 @@ enum AttributyTokenizer {
 
         let missingIndicies = indicies.subtracting(rangeIndices).sorted()
 
-        var location = 0
+        var location = missingIndicies.first ?? 0
         var length = 0
 
         missingIndicies.enumerated().forEach { enumerator in

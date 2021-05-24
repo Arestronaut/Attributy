@@ -42,6 +42,8 @@ final class AttributyTextView: UIViewRepresentable {
 
         let textField: UITextView = .init()
         textField.delegate = context.coordinator
+        textField.isEditable = false
+        textField.isSelectable = true
         textField.attributedText = mutableAttributedString
 
         if let _linkAttributes = linkAttributes {

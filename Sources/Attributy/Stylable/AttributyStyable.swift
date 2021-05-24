@@ -50,11 +50,11 @@ public struct AttributyStyable {
                 _attributes[.font] = font.bold()
 
             case .italic:
-                let font = (attributes[.font] as? UIFont) ?? .systemFont(ofSize: 14.0)
+                let font = (_attributes[.font] as? UIFont) ?? .systemFont(ofSize: 14.0)
                 _attributes[.font] = font.italic()
 
             case .url:
-                return
+                break
             }
         }
 

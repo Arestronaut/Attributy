@@ -8,7 +8,7 @@ public final class HTMLParser: AttributyParser {
     public func pattern(for parsableElement: ParsableElement) -> String? {
         switch parsableElement {
         case .bold: return "<b>(.|\n)*?<\\/b>"
-        case .italic: return "<i>(.|\n)*?<\\/o>"
+        case .italic: return "<i>(.|\n)*?<\\/i>"
         case .url: return "<a\\b[^>]*\\bhref\\s*=\\s*(\"[^\"]*\"|'[^']*')[^>]*>((?:(?!</a).)*)</a\\s*>"
         case .text: return nil
         }

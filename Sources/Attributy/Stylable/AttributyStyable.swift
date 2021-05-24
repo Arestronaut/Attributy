@@ -1,6 +1,6 @@
 import SwiftUI
 
-internal enum StyleModifier: Hashable {
+enum StyleModifier: Hashable {
     case font(UIFont)
     case foregroundColor(UIColor)
     case bold
@@ -31,8 +31,8 @@ internal enum StyleModifier: Hashable {
     }
 }
 
-struct AttributyStyable {
-    internal var modifiers: Set<StyleModifier> = []
+public struct AttributyStyable {
+    var modifiers: Set<StyleModifier> = []
 
     var attributes: [NSAttributedString.Key: Any] {
         var _attributes: [NSAttributedString.Key: Any] = [:]
@@ -61,7 +61,7 @@ struct AttributyStyable {
         return _attributes
     }
 
-    func font(_ font: UIFont) -> Self {
+    public func font(_ font: UIFont) -> Self {
         var modifiers = self.modifiers
         modifiers.insert(.font(font))
 
@@ -69,7 +69,7 @@ struct AttributyStyable {
         return stylable
     }
 
-    func foregroundColor(_ color: UIColor) -> Self {
+    public func foregroundColor(_ color: UIColor) -> Self {
         var modifiers = self.modifiers
         modifiers.insert(.foregroundColor(color))
 
@@ -77,7 +77,7 @@ struct AttributyStyable {
         return stylable
     }
 
-    func bold() -> Self {
+    public func bold() -> Self {
         var modifiers = self.modifiers
         modifiers.insert(.bold)
 
@@ -85,7 +85,7 @@ struct AttributyStyable {
         return stylable
     }
 
-    func italic() -> Self {
+    public func italic() -> Self {
         var modifiers = self.modifiers
         modifiers.insert(.italic)
 
@@ -93,7 +93,7 @@ struct AttributyStyable {
         return stylable
     }
 
-    func url(_ callback: @escaping (URL) -> Void) -> Self {
+    public func url(_ callback: @escaping (URL) -> Void) -> Self {
         var modifiers = self.modifiers
         modifiers.insert(.url(callback))
 

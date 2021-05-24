@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct AttributyText: View {
-    typealias RuleModifierCallback = (ParsableElement) -> ((AttributyStyable) -> AttributyStyable)
+public struct AttributyText: View {
+    public typealias RuleModifierCallback = (ParsableElement) -> ((AttributyStyable) -> AttributyStyable)
 
     private let content: String
     private let parser: AttributyParser
@@ -9,7 +9,7 @@ struct AttributyText: View {
     private var ruleMap: [ParsableElement: AttributyStyable] = [:]
     private let tokenizedContent: [ParserToken]
 
-    init<Parser: AttributyParser>(_ content: String, _ parser: Parser, _ callback: @escaping RuleModifierCallback) {
+    public init<Parser: AttributyParser>(_ content: String, _ parser: Parser, _ callback: @escaping RuleModifierCallback) {
         self.content = content
         self.parser = parser
         self.callback = callback
@@ -29,7 +29,7 @@ struct AttributyText: View {
         }
     }
 
-    var body: some View {
+    public var body: some View {
         AttributyTextView(tokenizedContent: tokenizedContent, ruleMap: ruleMap)
     }
 }

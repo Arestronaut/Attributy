@@ -1,9 +1,11 @@
 import Foundation
 
-final class HTMLParser: AttributyParser {
-    var parsableElements: Set<ParsableElement> = .init(ParsableElement.allCases)
+public final class HTMLParser: AttributyParser {
+    public var parsableElements: Set<ParsableElement> = .init(ParsableElement.allCases)
 
-    func pattern(for parsableElement: ParsableElement) -> String? {
+    public init() { }
+
+    public func pattern(for parsableElement: ParsableElement) -> String? {
         switch parsableElement {
         case .bold: return "<b>(.|\n)*?<\\/b>"
         case .italic: return "<i>(.|\n)*?<\\/o>"
@@ -12,7 +14,7 @@ final class HTMLParser: AttributyParser {
         }
     }
 
-    func parse(_ parsableString: String) -> [ParserToken] {
+    public func parse(_ parsableString: String) -> [ParserToken] {
         var tokens: [ParserToken] = []
 
         for parsableElement in parsableElements {

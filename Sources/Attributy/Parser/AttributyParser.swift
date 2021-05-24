@@ -1,19 +1,19 @@
 import Foundation
 
-enum ParsableElement: CaseIterable {
+public enum ParsableElement: CaseIterable {
     case bold
     case italic
     case url
     case text
 }
 
-enum ParsedElement: Hashable {
+public enum ParsedElement: Hashable {
     case bold(String)
     case italic(String)
     case url(String, URL)
     case text(String)
 
-    func hash(into hasher: inout Hasher) {
+    public func hash(into hasher: inout Hasher) {
         switch self {
         case let .bold(text):
             hasher.combine("bold \(text)")
@@ -29,7 +29,7 @@ enum ParsedElement: Hashable {
         }
     }
 
-    var content: String {
+    public var content: String {
         switch self {
         case let .bold(text): return text
         case let .italic(text): return text
@@ -38,7 +38,7 @@ enum ParsedElement: Hashable {
         }
     }
 
-    var parsableElement: ParsableElement {
+    public var parsableElement: ParsableElement {
         switch self {
         case .bold: return .bold
         case .italic: return .italic
@@ -48,12 +48,12 @@ enum ParsedElement: Hashable {
     }
 }
 
-struct ParserToken {
+public struct ParserToken {
     let parsedElement: ParsedElement
     let range: NSRange
 }
 
-protocol AttributyParser: AnyObject {
+public protocol AttributyParser: AnyObject {
     var parsableElements: Set<ParsableElement> { get }
 
     func pattern(for parsableElement: ParsableElement) -> String?

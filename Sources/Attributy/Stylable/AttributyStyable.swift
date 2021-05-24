@@ -6,6 +6,10 @@ enum StyleModifier: Hashable {
     case bold
     case italic
     case url((URL) -> Void)
+    case underline(UIColor?)
+    case strikethrough(UIColor?)
+    case kerning(CGFloat)
+    case backgroundColor(UIColor)
 
     func hash(into hasher: inout Hasher) {
         switch self {
@@ -23,6 +27,18 @@ enum StyleModifier: Hashable {
 
         case .url:
             hasher.combine("url")
+
+        case .underline:
+            hasher.combine("underline")
+
+        case .strikethrough:
+            hasher.combine("strikethrough")
+
+        case .kerning:
+            hasher.combine("kerning")
+
+        case .backgroundColor:
+            hasher.combine("backgroundColor")
         }
     }
 
@@ -55,50 +71,72 @@ public struct AttributyStyable {
 
             case .url:
                 break
+
+            case let .underline(color):
+                _attributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
+                if let color = color {
+                    _attributes[.underlineColor] = color
+                }
+
+            case let .strikethrough(color):
+                _attributes[.strikethroughStyle] = NSUnderlineStyle.single.rawValue
+                if let color = color {
+                    _attributes[.strikethroughColor] = color
+                }
+
+            case let .kerning(kern):
+                _attributes[.kern] = kern
+
+            case let .backgroundColor(color):
+                _attributes[.backgroundColor] = color
             }
         }
 
         return _attributes
     }
 
-    public func font(_ font: UIFont) -> Self {
+    private func apply(modifier: StyleModifier) -> Self {
         var modifiers = self.modifiers
-        modifiers.insert(.font(font))
+        modifiers.insert(modifier)
 
         let stylable = Self(modifiers: modifiers)
         return stylable
+    }
+
+    public func font(_ font: UIFont) -> Self {
+        apply(modifier: .font(font))
     }
 
     public func foregroundColor(_ color: UIColor) -> Self {
-        var modifiers = self.modifiers
-        modifiers.insert(.foregroundColor(color))
-
-        let stylable = Self(modifiers: modifiers)
-        return stylable
+        apply(modifier: .foregroundColor(color))
     }
 
     public func bold() -> Self {
-        var modifiers = self.modifiers
-        modifiers.insert(.bold)
-
-        let stylable = Self(modifiers: modifiers)
-        return stylable
+        apply(modifier: .bold)
     }
 
     public func italic() -> Self {
-        var modifiers = self.modifiers
-        modifiers.insert(.italic)
-
-        let stylable = Self(modifiers: modifiers)
-        return stylable
+        apply(modifier: .italic)
     }
 
     public func url(_ callback: @escaping (URL) -> Void) -> Self {
-        var modifiers = self.modifiers
-        modifiers.insert(.url(callback))
+        apply(modifier: .url(callback))
+    }
 
-        let stylable = Self(modifiers: modifiers)
-        return stylable
+    public func underline(_ color: UIColor?) -> Self {
+        apply(modifier: .underline(color))
+    }
+
+    public func strikethrough(_ color: UIColor?) -> Self {
+        apply(modifier: .strikethrough(color))
+    }
+
+    public func kerning(_ spacing: CGFloat) -> Self {
+        apply(modifier: .kerning(spacing))
+    }
+
+    public func backgroundColor(_ color: UIColor) -> Self {
+        apply(modifier: .backgroundColor(color))
     }
 }
 

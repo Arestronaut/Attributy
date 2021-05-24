@@ -39,14 +39,6 @@ enum AttributyTokenizer {
             }
         }
 
-        let correctedTokens: [ParserToken] = completeTokens.map { token in
-            guard case .text = token.parsedElement, token.range.location > 0 else { return token }
-            return .init(
-                parsedElement: token.parsedElement,
-                range: .init(location: token.range.location - 1, length: token.range.length + 1)
-            )
-        }
-
         return completeTokens
     }
 }

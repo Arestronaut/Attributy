@@ -46,7 +46,7 @@ public struct AttributyStyable {
                 _attributes[.foregroundColor] = color
 
             case .bold:
-                let font = (attributes[.font] as? UIFont) ?? .systemFont(ofSize: 14.0)
+                let font = (_attributes[.font] as? UIFont) ?? .systemFont(ofSize: 14.0)
                 _attributes[.font] = font.bold()
 
             case .italic:

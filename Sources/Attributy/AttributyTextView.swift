@@ -17,6 +17,8 @@ final class AttributyTextView: UIViewRepresentable {
     func makeUIView(context: Context) -> some UIView {
         let mutableAttributedString = NSMutableAttributedString(string: "")
 
+        var linkAttributes: [NSAttributedString.Key: Any]?
+
         for token in tokenizedContent {
             let styableContent = token.parsedElement.content
             let rule = ruleMap[token.parsedElement.parsableElement]
@@ -25,6 +27,8 @@ final class AttributyTextView: UIViewRepresentable {
 
             if case let .url(_, url) = token.parsedElement {
                 attributes?[.link] = url.absoluteString
+
+                linkAttributes = attributes
             }
 
             let attributedString = NSMutableAttributedString(
@@ -39,6 +43,10 @@ final class AttributyTextView: UIViewRepresentable {
         let textField: UITextView = .init()
         textField.delegate = context.coordinator
         textField.attributedText = mutableAttributedString
+
+        if let _linkAttributes = linkAttributes {
+            textField.linkTextAttributes = _linkAttributes
+        }
 
         return textField
     }
